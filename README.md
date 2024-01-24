@@ -7,11 +7,11 @@ This is Project 01 in our Operating System Class in HCMUS. Our task is writing a
 - It can be run on the Windows operating system. 
 - It can be executed via the command line using the following syntax: 
 ```
-MSSV1_MSSV2.exe <INPUT_FILE> <OUTPUT_FILE>
+22127007_22127085.exe <INPUT_FILE> <OUTPUT_FILE>
 ```
 For example: 
 ```
-MSSV1_MSSV2.exe input.txt output.txt 
+22127007_22127085.exe input.txt output.txt 
 ```
 - The input and output files are both saved in text format (*.txt).
 - The input and output files must follow syntax mentioned in session III.
@@ -113,9 +113,9 @@ It means:
 
 ## IV. Project Organization
 The folder contains:
-- **MSSV1_MSSV2-Code** folder: the entire source code of the program, remove 
+- **22127007_22127085-Code** folder: the entire source code of the program, remove 
 all irrelevant subfolders to reduce the size. 
-- **MSSV1_MSSV2.EXE** file: a executive program that can be run via the 
+- **22127007_22127085.EXE** file: a executive program that can be run via the 
 command line on Windows.
 - **Input.txt** file: a sample input file that your program can be executed. 
 - **Output.txt** file: a sample output file that your program writes out corresponding to the input file above.

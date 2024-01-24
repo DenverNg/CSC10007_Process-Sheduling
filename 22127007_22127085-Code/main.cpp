@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <cstdlib>
+#include <algorithm>
 
 using namespace std;
 class Process
@@ -11,8 +12,13 @@ public:
     int cpuBurstTime;
     int resourceUsageTime;
 
-    Process(int arrival, int cpu_burst, int resource_usage)
-        : arrivalTime(arrival), cpuBurstTime(cpu_burst), resourceUsageTime(resource_usage) {}
+    // Default constructor
+    Process() : arrivalTime(0), cpuBurstTime(0), resourceUsageTime(0) {}
+    
+    // Parameterized constructor
+    Process(int arrival, int cpuBurst, int resourceUsage)
+        : arrivalTime(arrival), cpuBurstTime(cpuBurst), resourceUsageTime(resourceUsage) {}
+
 };
 
 class Scheduler
@@ -21,7 +27,9 @@ private:
     vector<Process> processes;
     int schedulingAlgorithm;
     int timeQuantum;
-
+    // Member variables for Gantt charts
+    vector<int> cpuSchedule;
+    vector<int> resourceSchedule;
 public:
     Scheduler(const string &inputFile, const string &outputFile)
     {
@@ -85,8 +93,41 @@ private:
 
     void fcfsScheduling()
     {
-        // Implement FCFS scheduling logic here
-        // This is just a placeholder; you should replace it with your own logic
+        // Sort processes based on arrival time
+        sort(processes.begin(), processes.end(), [](const Process &a, const Process &b)
+             { return a.arrivalTime < b.arrivalTime; });
+
+        // Initialize Gantt chart for CPU and resource scheduling
+        int currentTime = 0;
+
+        for (const Process &process : processes)
+        {
+            // Update CPU schedule
+            for (int i = 0; i < process.cpuBurstTime; ++i)
+            {
+                cpuSchedule.push_back(process.arrivalTime);
+            }
+
+            // Update Resource schedule
+            for (int i = 0; i < process.resourceUsageTime; ++i)
+            {
+                resourceSchedule.push_back(process.arrivalTime);
+            }
+
+            // Update current time
+            currentTime += process.cpuBurstTime;
+
+            // Add waiting time for the next process if there is a gap
+            if (currentTime < process.arrivalTime)
+            {
+                for (int i = 0; i < process.arrivalTime - currentTime; ++i)
+                {
+                    cpuSchedule.push_back(0); // 0 denotes idle time
+                    resourceSchedule.push_back(0);
+                }
+                currentTime = process.arrivalTime;
+            }
+        }
     }
 
     void roundRobinScheduling()
@@ -104,8 +145,52 @@ private:
             exit(EXIT_FAILURE);
         }
 
-        // Implement the logic to generate the output (Gantt chart, turn-around time, etc.)
-        // ...
+        // Print Gantt chart for CPU scheduling to the output file
+        for (int i : cpuSchedule)
+        {
+            outfile << i << " ";
+        }
+        outfile << "\n";
+
+        // Print Gantt chart for resource scheduling to the output file
+        for (int i : resourceSchedule)
+        {
+            outfile << i << " ";
+        }
+        outfile << "\n";
+
+        // Calculate turn-around time and waiting time
+        int totalTurnAroundTime = 0;
+        int totalWaitingTime = 0;
+        int currentTime = 0;
+
+        for (const Process &process : processes)
+        {
+            int turnAroundTime = currentTime - process.arrivalTime;
+            int waitingTime = turnAroundTime - process.cpuBurstTime;
+            totalTurnAroundTime += turnAroundTime;
+            totalWaitingTime += waitingTime;
+
+            // Move the current time to the end of the current process
+            currentTime += process.cpuBurstTime;
+        }
+
+        // Print turn-around time for each process to the output file
+        for (const Process &process : processes)
+        {
+            int turnAroundTime = currentTime - process.arrivalTime;
+            outfile << turnAroundTime << " ";
+        }
+        outfile << "\n";
+
+        // Print waiting time for each process to the output file
+        for (const Process &process : processes)
+        {
+            int turnAroundTime = currentTime - process.arrivalTime;
+            int waitingTime = turnAroundTime - process.cpuBurstTime;
+            outfile << waitingTime << " ";
+        }
+        outfile << "\n";
 
         outfile.close();
     }
