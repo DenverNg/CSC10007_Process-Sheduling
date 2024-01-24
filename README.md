@@ -15,7 +15,15 @@ For example:
 ```
 - The input and output files are both saved in text format (*.txt).
 - The input and output files must follow syntax mentioned in session III.
-
+**HOW TO RUN PROGRAM**
+- First, Run this code in vscode terminal to create exe file
+```
+g++ 22127007_22127085-Code/main.cpp 22127007_22127085-Code/function.cpp -o 22127007_22127085.EXE
+```
+- Then, Run this code to run our program
+```
+./22127007_22127085.EXE Input.txt Output.txt
+```
 ## II. Task:
 | #   | Task Description                                   | Assigned |
 | --- | -------------------------------------------------- | :------: |
