@@ -84,6 +84,13 @@ private:
         case 2: // Round Robin
             roundRobinScheduling();
             break;
+        case 3: // SJF (Shortest Job First)
+            sjfScheduling();
+            break;
+        case 4: // SRTN (Shortest Remaining Time Next)
+
+            srtnScheduling();
+            break;
         // Add cases for other scheduling algorithms if needed
         default:
             cerr << "Invalid scheduling algorithm specified.\n";
@@ -133,9 +140,18 @@ private:
     void roundRobinScheduling()
     {
         // Implement Round Robin scheduling logic here
-        // This is just a placeholder; you should replace it with your own logic
     }
 
+    void sjfScheduling()
+    {
+        // Implement SJF (Shortest Job First) scheduling logic here
+    }
+
+    void srtnScheduling()
+    {
+        // Implement SRTN (Shortest Remaining Time Next) scheduling logic here
+    }
+    
     void writeOutput(const string &outputFile)
     {
         ofstream outfile(outputFile);
