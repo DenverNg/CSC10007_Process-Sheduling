@@ -14,7 +14,7 @@ For example:
 22127007_22127085.exe input.txt output.txt 
 ```
 - The input and output files are both saved in text format (*.txt).
-- The input and output files must follow syntax mentioned in session III.
+- The input and output files must follow syntax mentioned in session III. <br>
 **HOW TO RUN PROGRAM**
 - First, Run this code in vscode terminal to create exe file
 ```
