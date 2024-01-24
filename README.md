@@ -113,7 +113,7 @@ It means:
 
 ## IV. Project Organization
 The folder contains:
-- **MSSV1_MSSB2-Code** folder: the entire source code of the program, remove 
+- **MSSV1_MSSV2-Code** folder: the entire source code of the program, remove 
 all irrelevant subfolders to reduce the size. 
 - **MSSV1_MSSV2.EXE** file: a executive program that can be run via the 
 command line on Windows.
