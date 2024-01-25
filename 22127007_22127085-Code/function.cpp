@@ -4,8 +4,8 @@
 Scheduler::Scheduler(const string &inputFile, const string &outputFile)
 {
     readInput(inputFile);
-    executeScheduling();
-    writeOutput(outputFile);
+    //executeScheduling();
+    //writeOutput(outputFile);
 }
 
 void Scheduler::readInput(const string &inputFile)
@@ -23,23 +23,42 @@ void Scheduler::readInput(const string &inputFile)
     { // Round Robin
         infile >> timeQuantum;
     }
-
+    //cout << schedulingAlgorithm << " " << timeQuantum << " ";
     int numProcesses;
-    infile >> numProcesses;
-
+    while (!(infile >> numProcesses) || numProcesses <= 0 || numProcesses > 4)
+    {
+        cerr << "Error: Invalid number of processes.\n";
+        exit(EXIT_FAILURE);
+    }
+    //cout << numProcesses << endl;
     processes.resize(numProcesses);
 
+    string line;
+    infile.ignore();
     for (int i = 0; i < numProcesses; ++i)
     {
-        infile >> processes[i].arrivalTime >> processes[i].cpuBurstTime;
-
-        // Read resourceUsageTime if available
-        if (schedulingAlgorithm == 4 || schedulingAlgorithm == 2)
+        getline(infile, line);
+        //cout << line << endl;
+        istringstream iss(line);
+        iss >> processes[i].arrivalTime;
+        for (int j = 0; j < 3; ++j)
         {
-            infile >> processes[i].resourceUsageTime;
+            iss >> processes[i].cpuBurstTime[j];
+            if (processes[i].cpuBurstTime[j] == 0)
+                break;
+            iss >> processes[i].resourceUsageTime[j];
         }
     }
-
+    //cout << endl;
+    // for (int i=0;i<numProcesses;i++)
+    // {
+    //     cout << processes[i].arrivalTime << " ";
+    //     for (int j=0;j<3;j++)
+    //     {
+    //         cout << processes[i].cpuBurstTime[j] << " " << processes[i].resourceUsageTime[j] << " ";
+    //     }
+    //     cout << endl;
+    // }
     infile.close();
 }
 

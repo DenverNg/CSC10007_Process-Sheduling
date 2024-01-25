@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <vector>
 #include <algorithm>
@@ -11,13 +12,31 @@ class Process
 {
 public:
     int arrivalTime;
-    int cpuBurstTime;
-    int resourceUsageTime;
+    int cpuBurstTime[3];
+    int resourceUsageTime[3];
+
     // Default constructor
-    Process() : arrivalTime(0), cpuBurstTime(0), resourceUsageTime(0) {}
+    Process() : arrivalTime(0)
+    {
+        for (int i = 0; i < 3; ++i)
+        {
+            cpuBurstTime[i] = 0;
+            resourceUsageTime[i] = 0;
+        }
+    }
+
     // Parameterized constructor
-    Process(int arrival, int cpuBurst, int resourceUsage)
-        : arrivalTime(arrival), cpuBurstTime(cpuBurst), resourceUsageTime(resourceUsage) {}
+    Process(int arrival, int cpu1, int cpu2, int cpu3, int res1, int res2, int res3)
+        : arrivalTime(arrival)
+    {
+        cpuBurstTime[0] = cpu1;
+        cpuBurstTime[1] = cpu2;
+        cpuBurstTime[2] = cpu3;
+
+        resourceUsageTime[0] = res1;
+        resourceUsageTime[1] = res2;
+        resourceUsageTime[2] = res3;
+    }
 };
 
 class Scheduler
@@ -29,7 +48,7 @@ private:
     // Member variables for Gantt charts
     vector<int> cpuSchedule;
     vector<int> resourceSchedule;
-
+    // Member variables for output
 public:
     Scheduler(const string &inputFile, const string &outputFile);
 
