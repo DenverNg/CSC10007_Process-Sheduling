@@ -4,8 +4,8 @@
 Scheduler::Scheduler(const string &inputFile, const string &outputFile)
 {
     readInput(inputFile);
-    //executeScheduling();
-    //writeOutput(outputFile);
+    executeScheduling();
+    writeOutput(outputFile);
 }
 
 void Scheduler::readInput(const string &inputFile)
@@ -13,7 +13,7 @@ void Scheduler::readInput(const string &inputFile)
     ifstream infile(inputFile);
     if (!infile.is_open())
     {
-        cerr << "Error: Unable to open input file.\n";
+        cout << "Error: Unable to open input file.\n";
         exit(EXIT_FAILURE);
     }
 
@@ -27,7 +27,7 @@ void Scheduler::readInput(const string &inputFile)
     int numProcesses;
     while (!(infile >> numProcesses) || numProcesses <= 0 || numProcesses > 4)
     {
-        cerr << "Error: Invalid number of processes.\n";
+        cout << "Error: Invalid number of processes.\n";
         exit(EXIT_FAILURE);
     }
     //cout << numProcesses << endl;
@@ -37,6 +37,8 @@ void Scheduler::readInput(const string &inputFile)
     infile.ignore();
     for (int i = 0; i < numProcesses; ++i)
     {
+        processes[i].index=i+1;
+        processes[i].isCompleted=0;
         getline(infile, line);
         //cout << line << endl;
         istringstream iss(line);
@@ -67,7 +69,7 @@ void Scheduler::executeScheduling()
     switch (schedulingAlgorithm)
     {
     case 1: // FCFS
-        fcfsScheduling();
+        fcfsScheduling(processes);
         break;
     case 2: // Round Robin
         roundRobinScheduling();
@@ -79,14 +81,18 @@ void Scheduler::executeScheduling()
         srtnScheduling();
         break;
     default:
-        cerr << "Invalid scheduling algorithm specified.\n";
+        cout << "Invalid scheduling algorithm specified.\n";
         exit(EXIT_FAILURE);
     }
 }
 
-void Scheduler::fcfsScheduling()
+void Scheduler::fcfsScheduling(vector<Process> &processes)
 {
     // Implement FCFS scheduling logic here
+    sort(processes.begin(), processes.end(), [](const Process &a, const Process &b) {
+        return a.arrivalTime < b.arrivalTime;
+    });
+    
 }
 
 void Scheduler::roundRobinScheduling()
@@ -109,23 +115,28 @@ void Scheduler::writeOutput(const string &outputFile)
     ofstream outfile(outputFile);
     if (!outfile.is_open())
     {
-        cerr << "Error: Unable to open output file.\n";
+        cout << "Error: Unable to open output file.\n";
         exit(EXIT_FAILURE);
     }
 
-    // // Print Gantt chart for CPU scheduling to the output file
-    // for (int i : cpuSchedule)
-    // {
-    //     outfile << i << " ";
-    // }
-    // outfile << "\n";
+    // Print Gantt chart for CPU scheduling to the output file
+    for (int i : cpuSchedule)
+    {
+        if (i!=0)
+            outfile << i << " ";
+        else outfile << "_ ";
+    }
+    outfile << "\n";
 
-    // // Print Gantt chart for resource scheduling to the output file
-    // for (int i : resourceSchedule)
-    // {
-    //     outfile << i << " ";
-    // }
-    // outfile << "\n";
+    // Print Gantt chart for resource scheduling to the output file
+    for (int i : resourceSchedule)
+    {
+        if (i != 0)
+            outfile << i << " ";
+        else
+            outfile << "_ ";
+    }
+    outfile << "\n";
 
     // // Calculate turn-around time and waiting time
     // int totalTurnAroundTime = 0;
@@ -160,5 +171,5 @@ void Scheduler::writeOutput(const string &outputFile)
     // }
     // outfile << "\n";
 
-    // outfile.close();
+    outfile.close();
 }
