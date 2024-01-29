@@ -5,41 +5,29 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#include <string>
+#include <queue>
 
 using namespace std;
 
 class Process
 {
 public:
-    // Variables for testing
-    int index;
-    bool isCompleted;
     // Variables for scheduling
     int arrivalTime;
-    int cpuBurstTime[3];
-    int resourceUsageTime[3];
-    // Default constructor
-    Process() : index(0), isCompleted(0), arrivalTime(0)
-    {
-        for (int i = 0; i < 3; ++i)
-        {
-            cpuBurstTime[i] = 0;
-            resourceUsageTime[i] = 0;
-        }
-    }
+    int Task[6];
+    int turnAroundTime;
+    int waitingTime;
+    int curTaskPos;
 
-    // Parameterized constructor
-    Process(int index, bool isCompleted, int arrival, int cpu1, int cpu2, int cpu3, int res1, int res2, int res3)
-        :index(index), isCompleted(0), arrivalTime(arrival)
-    {
-        cpuBurstTime[0] = cpu1;
-        cpuBurstTime[1] = cpu2;
-        cpuBurstTime[2] = cpu3;
+    Process();
+    Process(int at, int tt, int wt);
+    Process(const Process &other);
+    ~Process(){};
 
-        resourceUsageTime[0] = res1;
-        resourceUsageTime[1] = res2;
-        resourceUsageTime[2] = res3;
-    }
+    int getArrivalTime();
+    int getCurTask();
+    void decreaseCurTask();
 };
 
 class Scheduler
@@ -47,20 +35,30 @@ class Scheduler
 private:
     vector<Process> processes;
     int schedulingAlgorithm;
+    int numProcesses;
     int timeQuantum;
+
+    int numCompleted;
+    int curTime;
     // Member variables for Gantt charts
-    vector<int> cpuSchedule;
-    vector<int> resourceSchedule;
+    queue<int> cpuQueue;
+    queue<int> resourceQueue;
     // Member variables for output
+    vector<char> cpuSchedule;
+    vector<char> resourceSchedule;
+
 public:
     Scheduler(const string &inputFile, const string &outputFile);
-
-private:
+    Scheduler();
+    ~Scheduler(){};
+    
     void readInput(const string &inputFile);
     void executeScheduling();
-    void fcfsScheduling(vector<Process> &processes);
+    void fcfsConcrete(vector<char> &Schedule, queue<int> &Queue, queue<int> &otherQueue);
+    void fcfsScheduling();
     void sjfScheduling();
     void srtnScheduling();
     void roundRobinScheduling();
+
     void writeOutput(const string &outputFile);
 };

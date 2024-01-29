@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 
     Scheduler scheduler(inputFile, outputFile);
 
-    cout << "Process scheduling complete. Output written to " << outputFile << endl;
+    cout << "\nProcess scheduling complete. Output written to " << outputFile << endl;
 
     return EXIT_SUCCESS;
 }
