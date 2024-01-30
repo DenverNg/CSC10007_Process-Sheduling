@@ -3,6 +3,7 @@
 
 Process::Process() : arrivalTime(0), turnAroundTime(0), waitingTime(0)
 {
+    index = 0;
     for (int i = 0; i < 6; ++i)
     {
         Task[i] = 0;
@@ -13,6 +14,7 @@ Process::Process() : arrivalTime(0), turnAroundTime(0), waitingTime(0)
 Process::Process(int at, int tt, int wt)
     : arrivalTime(at), turnAroundTime(tt), waitingTime(wt)
 {
+    index = 0;
     for (int i = 0; i < 6; ++i)
     {
         Task[i] = 0;
@@ -22,6 +24,7 @@ Process::Process(int at, int tt, int wt)
 
 Process::Process(const Process &other)
 {
+    index = other.index;
     arrivalTime = other.arrivalTime;
     turnAroundTime = other.turnAroundTime;
     waitingTime = other.waitingTime;
@@ -32,7 +35,7 @@ Process::Process(const Process &other)
     curTaskPos = other.curTaskPos;
 }
 
-int Process::getArrivalTime()
+int Process::getArrivalTime() const
 {
     return arrivalTime;
 }
@@ -53,6 +56,20 @@ int Process::getCurTask()
 void Process::decreaseCurTask()
 {
     Task[curTaskPos]--;
+}
+
+Process &Process::operator=(const Process &other)
+{
+    index = other.index;
+    arrivalTime = other.arrivalTime;
+    turnAroundTime = other.turnAroundTime;
+    waitingTime = other.waitingTime;
+    for (int i = 0; i < 6; ++i)
+    {
+        Task[i] = other.Task[i];
+    }
+    curTaskPos = other.curTaskPos;
+    return *this;
 }
 
 Scheduler::Scheduler() : schedulingAlgorithm(0), numProcesses(0), timeQuantum(0), numCompleted(0), curTime(0)
@@ -81,13 +98,13 @@ void Scheduler::readInput(const string &inputFile)
     { // Round Robin
         infile >> timeQuantum;
     }
-     cout << schedulingAlgorithm;
+    cout << schedulingAlgorithm;
     while (!(infile >> numProcesses) || numProcesses <= 0 || numProcesses > 4)
     {
         cout << "Error: Invalid number of processes.\n";
         exit(EXIT_FAILURE);
     }
-      cout << numProcesses << endl;
+    cout << numProcesses << endl;
     processes.resize(numProcesses);
 
     string line;
@@ -95,24 +112,40 @@ void Scheduler::readInput(const string &inputFile)
     for (int i = 0; i < numProcesses; i++)
     {
         getline(infile, line);
-         cout << line << endl;
+        cout << line << endl;
         istringstream iss(line);
         iss >> processes[i].arrivalTime;
+        processes[i].index = i + 1;
         for (int j = 0; j < 6; ++j)
         {
             iss >> processes[i].Task[j];
         }
     }
     cout << endl;
-     for (int i=0;i<numProcesses;i++)
-     {
-         cout << processes[i].arrivalTime << " ";
-         for (int j=0;j<6;j++)
-         {
-             cout << processes[i].Task[j] << " ";
-         }
-         cout << endl;
-     }
+    for (int i = 0; i < numProcesses; i++)
+    {
+        cout << processes[i].index << " ";
+        cout << processes[i].arrivalTime << " ";
+        for (int j = 0; j < 6; j++)
+        {
+            cout << processes[i].Task[j] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+    sort(processes.begin(), processes.end(), [](const Process &a, const Process &b)
+         { return a.arrivalTime < b.arrivalTime; });
+    for (int i = 0; i < numProcesses; i++)
+    {
+        cout << processes[i].index << " ";
+        cout << processes[i].arrivalTime << " ";
+        for (int j = 0; j < 6; j++)
+        {
+            cout << processes[i].Task[j] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
     infile.close();
 }
 
@@ -138,6 +171,16 @@ void Scheduler::executeScheduling()
     }
 }
 
+int Scheduler::getProcessByIndex(int index)
+{
+    for (int i = 0; i < numProcesses; i++)
+    {
+        if (processes[i].index == index)
+            return i;
+    }
+    return -1;
+}
+
 void Scheduler::fcfsConcrete(vector<char> &Schedule, queue<int> &Queue, queue<int> &otherQueue)
 {
     if (Queue.empty())
@@ -147,14 +190,14 @@ void Scheduler::fcfsConcrete(vector<char> &Schedule, queue<int> &Queue, queue<in
     }
 
     int First = Queue.front();
-    int curTask = processes[First].getCurTask();
-    string firstStr = to_string(First + 1);
+    int curTask = processes[getProcessByIndex(First)].getCurTask();
+    string firstStr = to_string(First);
     for (char c : firstStr)
         Schedule.push_back(c);
     if (curTask == 1)
         Queue.pop();
-    processes[First].decreaseCurTask();
-    if (processes[First].getCurTask() == 0)
+    processes[getProcessByIndex(First)].decreaseCurTask();
+    if (processes[getProcessByIndex(First)].getCurTask() == 0)
     {
         numCompleted++;
         return;
@@ -167,15 +210,17 @@ void Scheduler::fcfsConcrete(vector<char> &Schedule, queue<int> &Queue, queue<in
 void Scheduler::fcfsScheduling()
 {
     // Implement FCFS scheduling logic here
-    // sort(processes.begin(), processes.end(), [](const Process &a, const Process &b)
-    //      { return a.arrivalTime < b.arrivalTime; });
+    sort(processes.begin(), processes.end(), [](const Process &a, const Process &b)
+         { return a.arrivalTime < b.arrivalTime; });
 
     int numLoaded = 0;
     while (numCompleted != numProcesses)
     {
         if (processes[numLoaded].getArrivalTime() == curTime)
         {
-            cpuQueue.push(numLoaded);
+            // cpuQueue.push(numLoaded);
+            // cout << processes[numLoaded].index << endl;
+            cpuQueue.push(processes[numLoaded].index);
             numLoaded++;
         }
         fcfsConcrete(resourceSchedule, resourceQueue, cpuQueue);
@@ -193,14 +238,48 @@ void Scheduler::fcfsScheduling()
     }
 }
 
+void Scheduler::rrConcrete(vector<char> &Schedule, queue<int> &Queue, queue<int> &otherQueue)
+{
+    if (Queue.empty())
+    {
+        Schedule.push_back('_');
+        return;
+    }
+    int First = Queue.front();
+    int curTask = processes[First].getCurTask();
+    // Code here
+    processes[First].decreaseCurTask();
+    if (processes[First].getCurTask() == 0)
+    {
+        numCompleted++;
+        return;
+    }
+
+    if (First != Queue.front())
+        otherQueue.push(First);
+}
+
 void Scheduler::roundRobinScheduling()
 {
     // Implement Round Robin scheduling logic here
+    int numLoaded = 0;
+    while (numCompleted != numProcesses)
+    {
+        if (processes[numLoaded].getArrivalTime() == curTime)
+        {
+            cpuQueue.push(numLoaded);
+            numLoaded++;
+        }
+        fcfsConcrete(resourceSchedule, resourceQueue, cpuQueue);
+        fcfsConcrete(cpuSchedule, cpuQueue, resourceQueue);
+        curTime++;
+    }
 }
 
 void Scheduler::sjfScheduling()
 {
     // Implement SJF (Shortest Job First) scheduling logic here
+    
 }
 
 void Scheduler::srtnScheduling()
@@ -227,38 +306,6 @@ void Scheduler::writeOutput(const string &outputFile)
     {
         outfile << resourceSchedule[i] << " ";
     }
-    // // Calculate turn-around time and waiting time
-    // int totalTurnAroundTime = 0;
-    // int totalWaitingTime = 0;
-    // int currentTime = 0;
-
-    // for (const Process &process : processes)
-    // {
-    //     int turnAroundTime = currentTime - process.arrivalTime;
-    //     int waitingTime = turnAroundTime - process.cpuBurstTime;
-    //     totalTurnAroundTime += turnAroundTime;
-    //     totalWaitingTime += waitingTime;
-
-    //     // Move the current time to the end of the current process
-    //     currentTime += process.cpuBurstTime;
-    // }
-
-    // // Print turn-around time for each process to the output file
-    // for (const Process &process : processes)
-    // {
-    //     int turnAroundTime = currentTime - process.arrivalTime;
-    //     outfile << turnAroundTime << " ";
-    // }
-    // outfile << "\n";
-
-    // // Print waiting time for each process to the output file
-    // for (const Process &process : processes)
-    // {
-    //     int turnAroundTime = currentTime - process.arrivalTime;
-    //     int waitingTime = turnAroundTime - process.cpuBurstTime;
-    //     outfile << waitingTime << " ";
-    // }
-    // outfile << "\n";
 
     outfile.close();
 }

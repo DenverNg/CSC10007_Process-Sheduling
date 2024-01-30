@@ -14,6 +14,7 @@ class Process
 {
 public:
     // Variables for scheduling
+    int index;
     int arrivalTime;
     int Task[6];
     int turnAroundTime;
@@ -25,9 +26,10 @@ public:
     Process(const Process &other);
     ~Process(){};
 
-    int getArrivalTime();
+    int getArrivalTime() const;
     int getCurTask();
     void decreaseCurTask();
+    Process &operator=(const Process &other);
 };
 
 class Scheduler
@@ -51,13 +53,17 @@ public:
     Scheduler(const string &inputFile, const string &outputFile);
     Scheduler();
     ~Scheduler(){};
-    
+    int getProcessByIndex(int index);
     void readInput(const string &inputFile);
     void executeScheduling();
     void fcfsConcrete(vector<char> &Schedule, queue<int> &Queue, queue<int> &otherQueue);
     void fcfsScheduling();
+
+    void sjfConcrete(vector<char> &Schedule, queue<int> &Queue, queue<int> &otherQueue);
     void sjfScheduling();
     void srtnScheduling();
+
+    void rrConcrete(vector<char> &Schedule, queue<int> &Queue, queue<int> &otherQueue);
     void roundRobinScheduling();
 
     void writeOutput(const string &outputFile);
