@@ -14,7 +14,6 @@ class Process
 {
 public:
     // Variables for scheduling
-    int index;
     int arrivalTime;
     int Task[6];
     int turnAroundTime;
@@ -28,6 +27,7 @@ public:
 
     int getArrivalTime() const;
     int getCurTask();
+    int getCurBurstTime();
     void decreaseCurTask();
     Process &operator=(const Process &other);
 };
@@ -53,18 +53,20 @@ public:
     Scheduler(const string &inputFile, const string &outputFile);
     Scheduler();
     ~Scheduler(){};
-    int getProcessByIndex(int index);
     void readInput(const string &inputFile);
     void executeScheduling();
     void fcfsConcrete(vector<char> &Schedule, queue<int> &Queue, queue<int> &otherQueue);
     void fcfsScheduling();
 
+    void rrConcrete(vector<char> &Schedule, queue<int> &Queue, queue<int> &otherQueue, int &countDown);
+    void roundRobinScheduling();
+
     void sjfConcrete(vector<char> &Schedule, queue<int> &Queue, queue<int> &otherQueue);
     void sjfScheduling();
-    void srtnScheduling();
 
-    void rrConcrete(vector<char> &Schedule, queue<int> &Queue, queue<int> &otherQueue);
-    void roundRobinScheduling();
+    int findMinBurstTime(queue<int> &Queue);
+    void srtnConcrete(vector<char> &Schedule, queue<int> &Queue, queue<int> &otherQueue);
+    void srtnScheduling();
 
     void writeOutput(const string &outputFile);
 };
