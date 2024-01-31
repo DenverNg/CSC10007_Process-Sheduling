@@ -169,6 +169,39 @@ void Scheduler::executeScheduling()
     }
 }
 
+void Scheduler::printOutputToScreen(vector<char> cpuSchedule, vector<char> resourceSchedule)
+{
+    cout << "Time: ";
+    for (int i=0; i< max(cpuSchedule.size(), resourceSchedule.size()); i++)
+    {
+        cout << i << " ";
+    }
+    cout << endl;
+    cout << " CPU: ";
+    for (int i = 0; i < cpuSchedule.size(); i++)
+    {
+        cout << cpuSchedule[i] << " ";
+    }
+    cout << endl;
+    cout << " IO : ";
+    for (int i = 0; i < resourceSchedule.size(); i++)
+    {
+        cout << resourceSchedule[i] << " ";
+    }
+    cout << endl;
+    cout << " TT : ";
+    for (int i = 0; i < processes.size(); i++)
+    {
+        cout << processes[i].turnAroundTime << " ";
+    }
+    cout << endl;
+    cout << " WT : ";
+    for (int i = 0; i < processes.size(); i++)
+    {
+        cout << processes[i].waitingTime << " ";
+    }
+}
+
 // Implement FCFS scheduling logic here
 void Scheduler::fcfsConcrete(vector<char> &Schedule, queue<int> &Queue, queue<int> &otherQueue)
 {
@@ -177,7 +210,6 @@ void Scheduler::fcfsConcrete(vector<char> &Schedule, queue<int> &Queue, queue<in
         Schedule.push_back('_');
         return;
     }
-
     int First = Queue.front();
     int curTask = processes[First].getCurTask();
     string firstStr = to_string(First + 1);
@@ -189,6 +221,7 @@ void Scheduler::fcfsConcrete(vector<char> &Schedule, queue<int> &Queue, queue<in
     if (processes[First].getCurTask() == 0)
     {
         numCompleted++;
+        processes[First].turnAroundTime=curTime-processes[First].arrivalTime+1;
         return;
     }
 
@@ -222,15 +255,7 @@ void Scheduler::fcfsScheduling()
         }
         curTime++;
     }
-    for (int i = 0; i < cpuSchedule.size(); i++)
-    {
-        cout << cpuSchedule[i] << " ";
-    }
-    cout << endl;
-    for (int i = 0; i < resourceSchedule.size(); i++)
-    {
-        cout << resourceSchedule[i] << " ";
-    }
+    printOutputToScreen(cpuSchedule, resourceSchedule);
 }
 
 // Implement Round Robin scheduling logic here
@@ -255,14 +280,13 @@ void Scheduler::rrConcrete(vector<char> &Schedule, queue<int> &Queue, queue<int>
     if (processes[First].getCurTask() == 0)
     {
         numCompleted++;
+        processes[First].turnAroundTime = curTime - processes[First].arrivalTime + 1;
         Queue.pop();
         if (countDown == 0)
             countDown = timeQuantum;
         return;
     }
-
     int curTaskPos = processes[First].curTaskPos;
-
     if (countDown == 0)
     {
         Queue.pop();
@@ -322,6 +346,11 @@ void Scheduler::roundRobinScheduling()
     {
         cout << resourceSchedule[i] << " ";
     }
+    cout << endl;
+    for (int i = 0; i < processes.size(); i++)
+    {
+        cout << processes[i].turnAroundTime << " ";
+    }
 }
 
 // Implement SRTN scheduling logic here
@@ -344,6 +373,7 @@ void Scheduler::srtnConcrete(vector<char> &Schedule, queue<int> &Queue, queue<in
     if (processes[First].getCurTask() == 0)
     {
         numCompleted++;
+        processes[First].turnAroundTime = curTime - processes[First].arrivalTime + 1;
         return;
     }
     else
@@ -389,6 +419,11 @@ void Scheduler::srtnScheduling()
     for (int i = 0; i < resourceSchedule.size(); i++)
     {
         cout << resourceSchedule[i] << " ";
+    }
+    cout << endl;
+    for (int i = 0; i < processes.size(); i++)
+    {
+        cout << processes[i].turnAroundTime << " ";
     }
 }
 
@@ -442,6 +477,11 @@ void Scheduler::writeOutput(const string &outputFile)
     {
         outfile << resourceSchedule[i] << " ";
     }
-
+    outfile << endl;
+    // Print turnaround time for each process to the output file
+    for (int i = 0; i < processes.size(); i++)
+    {
+        outfile << processes[i].turnAroundTime << " ";
+    }
     outfile.close();
 }

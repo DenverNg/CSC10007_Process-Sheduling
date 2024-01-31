@@ -19,6 +19,7 @@ public:
     int turnAroundTime;
     int waitingTime;
     int curTaskPos;
+    int taskExecuted; // count the number of tasks executed
 
     Process();
     Process(int at, int tt, int wt);
@@ -55,6 +56,9 @@ public:
     ~Scheduler(){};
     void readInput(const string &inputFile);
     void executeScheduling();
+    void printOutputToScreen(vector<char> cpuSchedule, vector<char> resourceSchedule);
+    void writeOutput(const string &outputFile);
+
     void fcfsConcrete(vector<char> &Schedule, queue<int> &Queue, queue<int> &otherQueue);
     void fcfsScheduling();
 
@@ -67,6 +71,4 @@ public:
     int findMinBurstTime(queue<int> &Queue);
     void srtnConcrete(vector<char> &Schedule, queue<int> &Queue, queue<int> &otherQueue);
     void srtnScheduling();
-
-    void writeOutput(const string &outputFile);
 };
