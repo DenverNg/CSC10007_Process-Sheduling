@@ -4,5 +4,8 @@
     "*.vuerd": "json",
     "iosfwd": "cpp",
     "iostream": "cpp"
-  }
+  },
+  "cSpell.words": [
+    "heapify"
+  ]
 }

@@ -18,7 +18,7 @@ For example:
 **HOW TO RUN PROGRAM**
 - First, Run this code in vscode terminal to create exe file
 ```
-g++ 22127007_22127085-Code/main.cpp 22127007_22127085-Code/function.cpp -o 22127007_22127085.EXE
+g++ 22127007_22127085-Code/*.cpp -o 22127007_22127085.EXE
 ```
 - Then, Run this code to run our program
 ```
@@ -28,11 +28,11 @@ g++ 22127007_22127085-Code/main.cpp 22127007_22127085-Code/function.cpp -o 22127
 | #   | Task Description                                   | Assigned |
 | --- | -------------------------------------------------- | :------: |
 | 1   | Create at least 8 inputs (at least 2 inputs per algorithm) and expected outputs         |     22127007     |
-| 2   | Write function to read command line and input file |     22127085     |
-| 3   | Write function to solve FCFS algorithm             |     22127007     |
+| 2   | Write base classes and ideas to follow |     22127085     |
+| 3   | Write function to solve FCFS algorithm             |     22127085     |
 | 4   | Write function to solve RR algorithm               |     22127085     |
 | 5   | Write function to solve SJF algorithm              |     22127007     |
-| 6   | Write function to solve SRTN algorithm             |     22127085     |
+| 6   | Write function to solve SRTN algorithm             |     22127007     |
 
 ## III. Syntax
 ### 1. Syntax of the input file
@@ -108,7 +108,7 @@ the waiting time of all processes.
 | 1<br>3<br>0 5 3 4<br>1 4<br>2 3 3 | 1 1 1 1 1 2 2 2 2 3 3 3 1 1 1 1<br>_ _ _ _ _ 1 1 1 _ _ _ _ 3 3 3<br>16 8 13<br>4 4 7 |
 
 It means: 
-|     22127007     | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  | 13  | 14  | 15  |
+|          | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  | 13  | 14  | 15  |
 | ------- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | **CPU** | P1  | P1  | P1  | P1  | P1  | P2  | P2  | P2  | P2  | P3  | P3  | P3  | P1  | P1  | P1  | P1  |
 | **R**   |     |     |     |     |     | P1  | P1  | P1  |     |     |     |     | P3  | P3  | P3  |     |
