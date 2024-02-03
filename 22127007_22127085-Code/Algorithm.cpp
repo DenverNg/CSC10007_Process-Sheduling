@@ -83,8 +83,6 @@ void Algorithm::execute(string &cpuChart, string &ioChart, int t)
 
 void RR::execute(string &cpuChart, string &ioChart, int t)
 {
-    if (t == 17)
-        cout << "";
     Algorithm::execute(cpuChart, ioChart, t);
     if (cpuRunning != nullptr)
         --count;
