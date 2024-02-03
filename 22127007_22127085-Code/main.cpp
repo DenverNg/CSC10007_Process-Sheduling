@@ -1,4 +1,4 @@
-#include"function.h"
+#include"Scheduler.h"
 
 int main(int argc, char *argv[])
 {
@@ -11,7 +11,11 @@ int main(int argc, char *argv[])
     string inputFile = argv[1];
     string outputFile = argv[2];
 
-    Scheduler scheduler(inputFile, outputFile);
+    Scheduler *s = new Scheduler(argv[1]);
+    s->run();
+    s->exportOutput(argv[2]);
+
+    delete s;
 
     cout << "\nProcess scheduling complete. Output written to " << outputFile << endl;
 
