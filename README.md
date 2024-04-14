@@ -7,34 +7,24 @@ This is Project 01 in our Operating System Class in HCMUS. Our task is writing a
 - It can be run on the Windows operating system. 
 - It can be executed via the command line using the following syntax: 
 ```
-22127007_22127085.exe <INPUT_FILE> <OUTPUT_FILE>
+main.exe <INPUT_FILE> <OUTPUT_FILE>
 ```
 For example: 
 ```
-22127007_22127085.exe input.txt output.txt 
+main.exe input.txt output.txt 
 ```
 - The input and output files are both saved in text format (*.txt).
-- The input and output files must follow syntax mentioned in session III. <br>
+- The input and output files must follow syntax mentioned in session II. <br>
 **HOW TO RUN PROGRAM**
 - First, Run this code in vscode terminal to create exe file
 ```
-g++ 22127007_22127085-Code/*.cpp -o 22127007_22127085.EXE
+g++ Source-Code/*.cpp -o main.exe
 ```
 - Then, Run this code to run our program
 ```
-./22127007_22127085.EXE Input.txt Output.txt
+./main.exe input.txt output.txt
 ```
-## II. Task:
-| #   | Task Description                                   | Assigned |
-| --- | -------------------------------------------------- | :------: |
-| 1   | Create at least 8 inputs (at least 2 inputs per algorithm) and expected outputs         |     22127007     |
-| 2   | Write base classes and ideas to follow |     22127085     |
-| 3   | Write function to solve FCFS algorithm             |     22127085     |
-| 4   | Write function to solve RR algorithm               |     22127085     |
-| 5   | Write function to solve SJF algorithm              |     22127007     |
-| 6   | Write function to solve SRTN algorithm             |     22127007     |
-
-## III. Syntax
+## II. Syntax
 ### 1. Syntax of the input file
 - The first line: an integer from 1 to 4 representing the scheduling algorithm
 
@@ -119,11 +109,12 @@ It means:
 | P2  | 8                |      4       |
 | P3  | 13               |      7       |
 
-## IV. Project Organization
+## III. Project Organization
 The folder contains:
-- **22127007_22127085-Code** folder: the entire source code of the program, remove 
+- **Source-Code** folder: the entire source code of the program, remove 
 all irrelevant subfolders to reduce the size. 
-- **22127007_22127085.EXE** file: a executive program that can be run via the 
+- **Test cases** folder: nearly 50 test cases for 4 algorithms
+- **main.exe** file: a executive program that can be run via the 
 command line on Windows.
-- **Input.txt** file: a sample input file that your program can be executed. 
-- **Output.txt** file: a sample output file that your program writes out corresponding to the input file above.
+- **input.txt** file: a sample input file that your program can be executed. 
+- **output.txt** file: a sample output file that your program writes out corresponding to the input file above.
